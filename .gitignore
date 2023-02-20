@@ -1,0 +1,11 @@
+/devserver
+/node_modules
+/.next/
+/out/
+/build
+/videos
+public/static/*
+dist
+combined.log
+.env
+ll.db
