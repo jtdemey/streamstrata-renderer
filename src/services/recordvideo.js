@@ -1,9 +1,7 @@
-import dotenv from "dotenv";
 import path from "path";
 import { chromium } from "playwright";
 import { saveVideo } from "playwright-video";
 
-dotenv.config();
 const SCREEN_DIMS = { width: 1920, height: 1080 };
 
 (async () => {

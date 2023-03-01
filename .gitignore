@@ -8,4 +8,4 @@ public/static/*
 dist
 combined.log
 .env
-ll.db
+streamstrata.db

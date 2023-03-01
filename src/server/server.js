@@ -1,12 +1,13 @@
 import Fastify from "fastify";
 import Cors from "@fastify/cors";
+import dotenv from "dotenv";
 import createSchema from "../services/createschema.js";
-import db from "../db/db.js";
+
+dotenv.config();
 
 const fastify = Fastify({ logger: true });
-
 fastify.register(Cors, {
-  origin: "http://localhost:3000"
+  origin: "http://localhost:5173"
 });
 fastify.register(import("./routes/ExportRoutes.js"));
 
