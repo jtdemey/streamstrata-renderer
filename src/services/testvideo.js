@@ -17,10 +17,10 @@ const SCREEN_DIMS = { width: 1920, height: 1080 };
     path.join(process.cwd(), "videos/aha.mp4"),
     { fps: 60 }
   );
-  await page.goto("http://localhost:3000/", { timeout: 10000 });
+  await page.goto("http://localhost:5173/", { timeout: 10000 });
   const attemptLocator = page.locator("text=Neon");
   await attemptLocator.click({ timeout: 5000 });
-  await page.waitForURL("http://localhost:3000/neon", { timeout: 10000 });
+  await page.waitForURL("http://localhost:5173/neon", { timeout: 10000 });
   const titleLocator = page.locator("text=Soapy");
   await titleLocator.click({ timeout: 10000 });
   await videoCapture.stop();

@@ -1,13 +1,47 @@
 import { nanoid } from "nanoid";
 import db from "../db/db.js";
 import ExportRequestStatuses from "../models/ExportRequestStatuses.js";
+import { log } from "../server/logger.js";
+import recordExport from "./recordexport.js";
+
+const QUEUE_CAPACITY = 100;
+
+const checkQueue = db.prepare(
+  `SELECT COUNT(*) FROM export_requests WHERE status = ${ExportRequestStatuses.Queued}`
+);
 
 const insertExportRequest = db.prepare(
   `INSERT INTO export_requests (export_id, parameters, status, time_requested) VALUES (?, ?, ?, ?)`
 );
 
-const requestExport = (params, timeRequested) => {
-  insertExportRequest.run(nanoid(24), params, ExportRequestStatuses.Queued, timeRequested);
+const requestExport = async (params) => {
+  const timeRequested = new Date().toISOString();
+  const id = nanoid(24);
+  log(`Received export request ${id}`);
+
+  // Check queue capacity
+  const queuedCount = checkQueue.run();
+  log('Queued: ' + queuedCount);
+
+  if (queuedCount > QUEUE_CAPACITY) {
+    insertExportRequest.run(
+      id,
+      JSON.stringify(params),
+      ExportRequestStatuses.Queued, timeRequested
+    );
+    return id;
+  }
+
+  // Record export
+  insertExportRequest.run(
+    id,
+    JSON.stringify(params),
+    ExportRequestStatuses.Recording,
+    timeRequested
+  );
+  // await recordExport(id);
+
+  return id;
 };
 
 export default requestExport;
