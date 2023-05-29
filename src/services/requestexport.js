@@ -17,11 +17,11 @@ const insertExportRequest = db.prepare(
 const requestExport = async (params) => {
   const timeRequested = new Date().toISOString();
   const id = nanoid(24);
-  log(`Received export request ${id}`);
+  log(`Received export request`, id);
 
   // Check queue capacity
-  const queuedCount = checkQueue.run();
-  log('Queued: ' + queuedCount);
+  const queuedCount = checkQueue.get()["COUNT(*)"];
+  log(`Queued: ${queuedCount}`);
 
   if (queuedCount > QUEUE_CAPACITY) {
     insertExportRequest.run(
@@ -39,9 +39,9 @@ const requestExport = async (params) => {
     ExportRequestStatuses.Recording,
     timeRequested
   );
-  // await recordExport(id);
-
-  return id;
+  log("Inserted export request", id);
+  const exportFileName = await recordExport(id);
+  return exportFileName;
 };
 
 export default requestExport;
