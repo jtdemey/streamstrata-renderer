@@ -2,7 +2,6 @@ import { nanoid } from "nanoid";
 import db from "../db/db.js";
 import ExportRequestStatuses from "../models/ExportRequestStatuses.js";
 import { log } from "../server/logger.js";
-import recordExport from "./recordexport.js";
 
 const QUEUE_CAPACITY = 100;
 
@@ -40,8 +39,7 @@ const requestExport = async (params) => {
     timeRequested
   );
   log("Inserted export request", id);
-  const exportFileName = await recordExport(id);
-  return exportFileName;
+  return id;
 };
 
 export default requestExport;

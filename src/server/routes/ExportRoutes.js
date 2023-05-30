@@ -1,3 +1,4 @@
+import { addJobToQueue } from "../../server/queue.js";
 import getExportParams from "../../services/getexportparams.js";
 import getExportStatus from "../../services/getexportstatus.js";
 import requestExport from "../../services/requestexport.js";
@@ -21,7 +22,10 @@ const routes = async (fastify) => {
   fastify.post("/", async (request, reply) => {
     // Request body: { view: string; parameters: object[string][any] }
     try {
-      const exportId = await requestExport(request.body);
+      await addJobToQueue({
+        type: "processExport",
+        requestBody: request.body
+      });
       reply.code(201);
       return { exportId, status: "Complete" };
     } catch(e) {
