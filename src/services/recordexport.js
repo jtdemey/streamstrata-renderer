@@ -3,7 +3,6 @@ import path from "path";
 import { chromium } from "playwright";
 import { saveVideo } from "playwright-video";
 import { log, logError } from "../server/logger.js";
-import getExportParams from "./getexportparams.js";
 import setExportError from "./setexporterror.js";
 
 const createVideoCapture = async (browser, exportId, fileName, page, videoContext) => {
@@ -60,9 +59,8 @@ const launchChromium = async (exportId) => {
   }
 };
 
-const recordExport = async (exportId) => {
+const recordExport = async (exportId, parameters) => {
   log("Starting recording process", exportId);
-  const parameters = getExportParams(exportId);
   const viewName = parameters.view;
   if (!viewName) {
     logError("No view specified in parameters", exportId);
