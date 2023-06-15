@@ -1,6 +1,7 @@
 import { addJobToQueue } from "../../server/queue.js";
 import getExportParams from "../../services/getexportparams.js";
 import getExportStatus from "../../services/getexportstatus.js";
+import requestExport from "../../services/requestexport.js";
 
 const routes = async (fastify) => {
 

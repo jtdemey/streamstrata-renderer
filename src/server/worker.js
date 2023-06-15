@@ -1,14 +1,21 @@
 import { Worker } from "bullmq";
+import { log, logError } from "../server/logger.js";
+import applyTransparency from "../services/applytransparency.js";
 import recordExport from "../services/recordexport.js";
-import { logError } from "../server/logger.js";
 
 const worker = new Worker("exportQueue", async job => {
-  console.log(job.data.viewParameters);
-  if (!job.data.exportId || !job.data.viewParameters) {
+  const { exportId, viewParameters } = job.data;
+  if (!exportId || !viewParameters) {
     logError(`Failed to start worker; job data not expected shape`);
     return;
   }
-  await recordExport(job.data.exportId, job.data.viewParameters);
+  try {
+    const rawFileName = await recordExport(exportId, viewParameters);
+    const alphaFileName = await applyTransparency(rawFileName);
+  } catch(e) {
+    logError(e);
+  }
+  log("Worker job finished", exportId);
 }, {
   connection: {
     host: "localhost",
@@ -23,3 +30,6 @@ worker.on("error", (err) => {
 worker.on("failed", (_, err) => {
   logError(`Worker failed: ${err}`);
 });
+
+log("Worker started");
+log("---");

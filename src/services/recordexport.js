@@ -71,7 +71,7 @@ const recordExport = async (exportId, parameters) => {
   const screenDims = { width: parameters.width || 1280, height: parameters.height || 720 };
   const clientOrigin = process.env.CLIENT_ORIGIN || "http://localhost:5173/";
   const uri = `${clientOrigin}create/${viewName}?r=1&export-id=${exportId}`;
-  const fileName = `videos/${nanoid()}.mp4`;
+  const fileName = `videos/raw/${nanoid()}.mp4`;
 
   const browser = await launchChromium(exportId);
   const videoContext = await getBrowserContext(browser, exportId, screenDims);
