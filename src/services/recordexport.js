@@ -82,7 +82,7 @@ const recordExport = async (exportId, parameters) => {
   log("Navigated to application", exportId);
   const videoCapture = await createVideoCapture(browser, exportId, fileName, page, videoContext);
   try {
-    await page.locator("#test").click({ timeout: 10000 });
+    await page.locator("#you-aint-gon-find-this").click({ timeout: 10000 });
   } catch(e) {
     logError(e, exportId);
   }

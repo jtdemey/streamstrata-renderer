@@ -11,7 +11,7 @@ const worker = new Worker("exportQueue", async job => {
   }
   try {
     const rawFileName = await recordExport(exportId, viewParameters);
-    const alphaFileName = await applyTransparency(rawFileName);
+    const alphaFileName = await applyTransparency(exportId, rawFileName);
   } catch(e) {
     logError(e);
   }
